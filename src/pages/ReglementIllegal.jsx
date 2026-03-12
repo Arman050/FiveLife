@@ -1,0 +1,135 @@
+import { motion } from 'framer-motion'
+import PageWrapper from '../components/PageWrapper'
+import GlassCard from '../components/GlassCard'
+import SectionHeader from '../components/SectionHeader'
+
+function RuleItem({ icon = '·', text, severity = 'info' }) {
+  const colors = {
+    ban:  { bg: 'rgba(239,68,68,0.08)',   border: 'rgba(239,68,68,0.5)',   text: '#fca5a5' },
+    warn: { bg: 'rgba(249,115,22,0.08)',  border: 'rgba(249,115,22,0.5)',  text: '#fdba74' },
+    info: { bg: 'rgba(168,85,247,0.08)',  border: 'rgba(168,85,247,0.5)',  text: '#c084fc' },
+    ok:   { bg: 'rgba(34,197,94,0.08)',   border: 'rgba(34,197,94,0.5)',   text: '#86efac' },
+  }
+  const c = colors[severity] || colors.info
+  return (
+    <li className="flex items-start gap-3 px-4 py-3 rounded-lg mb-2 text-sm font-inter leading-relaxed transition-all hover:scale-[1.01]"
+      style={{ background: c.bg, borderLeft: `3px solid ${c.border}` }}>
+      <span className="flex-shrink-0 mt-0.5" style={{ color: c.text }}>{icon}</span>
+      <span className="text-gray-300">{text}</span>
+    </li>
+  )
+}
+
+const CRIME_RULES = [
+  { icon: '📣', text: 'Braquage : annonce RP minimum 5 minutes avant le début de l\'action.', severity: 'warn' },
+  { icon: '🤝', text: 'Otage : demande de rançon RP obligatoire et négociation IC.', severity: 'info' },
+  { icon: '🎙️', text: 'Recrutement : entretien IC obligatoire de 10 minutes minimum avant intégration.', severity: 'warn' },
+  { icon: '💼', text: 'Deal : spot fixe uniquement, pas de deal ambulant ou aléatoire.', severity: 'warn' },
+  { icon: '🏦', text: 'Blanchiment d\'argent : entreprise légale requise comme couverture.', severity: 'info' },
+  { icon: '🌿', text: 'Pour rejoindre l\'illégal depuis le légal ou inversement, un wipe est obligatoire.', severity: 'ban' },
+  { icon: '🚫', text: 'Interdit d\'attaquer une faction sans raison RP justifiée et documentée.', severity: 'ban' },
+  { icon: '📵', text: 'Les appels téléphoniques IC doivent rester cohérents avec votre RP.', severity: 'info' },
+]
+
+const WIPE_RULES = [
+  { icon: '🔄', text: 'Le wipe efface complètement votre personnage — nouveau perso, nouvelle histoire.', severity: 'info' },
+  { icon: '☠️', text: 'Mort RP validée selon : dossier Mort RP, absence de peur, abus de tirs/blessures, expulsion d\'organisation.', severity: 'warn' },
+  { icon: '⛔', text: 'Interdit de transférer biens (voitures, armes, argent, propriétés) avant un wipe.', severity: 'ban' },
+  { icon: '💸', text: 'Impossible de faire un wipe si votre compte est en négatif ou si des procédures judiciaires sont en cours.', severity: 'ban' },
+  { icon: '🔁', text: 'Interdit de faire un nouveau perso lié à un ancien (même groupe, même connexion scénaristique).', severity: 'ban' },
+]
+
+const ARMES_RULES = [
+  { icon: '🔫', text: 'Brandishing (brandir une arme sans justification RP) = crime passible d\'arrestation.', severity: 'warn' },
+  { icon: '💥', text: 'Tirer sur quelqu\'un sans RP justifié = homicide au minimum. Sanction lourde.', severity: 'ban' },
+  { icon: '🗡️', text: 'Arme blanche utilisée sans RP = agression qualifiée.', severity: 'warn' },
+  { icon: '🚫', text: 'Vol d\'arme de police = bannissement définitif.', severity: 'ban' },
+  { icon: '📦', text: 'Port d\'arme en zone safe (prison, hôpital, poste police) = sanction immédiate.', severity: 'ban' },
+]
+
+const HRP_RULES = [
+  { icon: '🖥️', text: 'No props, no water, no bush — mods graphiques avantageux interdits.', severity: 'ban' },
+  { icon: '🎯', text: 'Crosshairs externes (viseurs), tracers, kill/blood/hit effects interdits.', severity: 'ban' },
+  { icon: '👁️', text: 'Modification de FOV (champ de vision) interdite.', severity: 'ban' },
+  { icon: '⚡', text: 'Fichiers "full stamina" ou tout fichier donnant un avantage compétitif interdits.', severity: 'ban' },
+  { icon: '📹', text: 'En stream : interdiction de trashtalk, d\'utiliser les infos HRP du chat, de dénigrer le serveur.', severity: 'ban' },
+  { icon: '🎵', text: 'Couper le son et la vidéo lors de l\'intervention d\'un modérateur en stream.', severity: 'warn' },
+]
+
+const REMBOURSEMENT = [
+  { icon: '❌', text: 'Pas de remboursement pour pertes lors d\'un reboot serveur (heure fixe, prévisible).', severity: 'warn' },
+  { icon: '❌', text: 'Pas de remboursement pour erreurs de virement. Vérifiez l\'identité et le montant.', severity: 'warn' },
+  { icon: '❌', text: 'Pas de remboursement pour biens illégaux perdus en coma ou déconnexion.', severity: 'warn' },
+  { icon: '❌', text: 'Pas de remboursement pour inactivité prolongée (maison expirée, etc.).', severity: 'warn' },
+  { icon: '❌', text: 'Pas de remboursement pour vols ou trahisons de personnes à qui vous avez donné accès.', severity: 'warn' },
+  { icon: '⚠️', text: 'Des preuves convaincantes sont requises pour toute demande de remboursement exceptionnelle.', severity: 'info' },
+]
+
+export default function ReglementIllegal() {
+  return (
+    <PageWrapper
+      title="Règlement Illégal"
+      description="Règlements illégaux FiveLife RP — Crime organisé, armes, wipe, remboursements."
+    >
+      {/* Hero */}
+      <div className="relative py-20 px-6 overflow-hidden bg-grid"
+        style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a0810 50%, #0a0a0a 100%)' }}>
+        <div className="orb w-96 h-96 -top-20 -right-20 opacity-30"
+          style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.3) 0%, transparent 70%)' }} />
+        <div className="max-w-4xl mx-auto text-center relative z-10 pt-12">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <span className="badge badge-red mb-4 inline-block">🔥 Factions Illégales</span>
+            <h1 className="font-orbitron font-900 text-4xl md:text-5xl text-white mb-4">
+              Règlement <span style={{ background: 'linear-gradient(90deg, #ef4444, #f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Illégal</span>
+            </h1>
+            <p className="text-gray-400 font-inter max-w-2xl mx-auto">
+              Règles spécifiques aux activités criminelles. Ces règles encadrent le jeu illégal tout en maintenant l'immersion RP.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-6 py-16 space-y-14">
+
+        <GlassCard className="p-7" delay={0}
+          style={{ borderColor: 'rgba(239,68,68,0.25)' }}>
+          <SectionHeader emoji="🌿" title="Crime Organisé" subtitle="Règles encadrant le roleplay criminel et les organisations illégales." />
+          <ul>{CRIME_RULES.map((r, i) => <RuleItem key={i} {...r} />)}</ul>
+        </GlassCard>
+
+        <GlassCard className="p-7" delay={0.05}>
+          <SectionHeader emoji="🔫" title="Règlement des Armes" subtitle="Port, brandissement et utilisation des armes en RP." />
+          <ul>{ARMES_RULES.map((r, i) => <RuleItem key={i} {...r} />)}</ul>
+        </GlassCard>
+
+        <GlassCard className="p-7" delay={0.1}>
+          <SectionHeader emoji="💀" title="Wipe Personnage" subtitle="Conditions et règles liées à l'effacement d'un personnage." />
+          <ul>{WIPE_RULES.map((r, i) => <RuleItem key={i} {...r} />)}</ul>
+        </GlassCard>
+
+        <GlassCard className="p-7" delay={0.15}>
+          <SectionHeader emoji="🖥️" title="Règlement HRP — Graphismes & Mods" subtitle="Modifications de jeu autorisées et interdites." />
+          <ul>{HRP_RULES.map((r, i) => <RuleItem key={i} {...r} />)}</ul>
+        </GlassCard>
+
+        <GlassCard className="p-7" delay={0.2}>
+          <SectionHeader emoji="💰" title="Politique de Remboursements" subtitle="Ce que le staff peut et ne peut pas rembourser." />
+          <ul>{REMBOURSEMENT.map((r, i) => <RuleItem key={i} {...r} />)}</ul>
+        </GlassCard>
+
+        {/* Warning banner */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="rounded-2xl p-5 text-center"
+          style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.3)' }}
+        >
+          <p className="text-red-300 font-inter text-sm">
+            ⚠️ Tout fonctionnaire (police, EMS, gouvernement) exposé à des actes illégaux est passible de la prison à vie ou de la peine de mort (fin du personnage).
+          </p>
+        </motion.div>
+      </div>
+    </PageWrapper>
+  )
+}
