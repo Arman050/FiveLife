@@ -443,162 +443,263 @@ export default function Store() {
       description="Boutique FiveLife RP avec paiement sécurisé Tebex."
       className="px-4 md:px-8 lg:px-10 py-20"
     >
+      <style>{`
+        .store-card {
+          position: relative;
+          overflow: hidden;
+          border-radius: 2px;
+          border: 1px solid rgba(168,85,247,0.18);
+          background: rgba(10,4,22,0.9);
+          display: flex;
+          flex-direction: column;
+          transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+        }
+        .store-card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(168,85,247,0.55);
+          box-shadow: 0 0 30px rgba(168,85,247,0.2), 0 8px 32px rgba(0,0,0,0.5);
+        }
+        .store-card-img-wrap {
+          position: relative;
+          overflow: hidden;
+        }
+        .store-card-img {
+          width: 100%;
+          aspect-ratio: 16/9;
+          object-fit: cover;
+          display: block;
+          transition: transform 0.4s ease;
+        }
+        .store-card:hover .store-card-img {
+          transform: scale(1.04);
+        }
+        .store-card-body {
+          padding: 0.75rem 0.85rem 0.85rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+          flex: 1;
+        }
+        .store-card-name {
+          font-family: 'Orbitron', sans-serif;
+          font-size: 0.65rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: #F3E8FF;
+          line-height: 1.3;
+        }
+        .store-card-desc {
+          font-family: 'Barlow Condensed', sans-serif;
+          font-size: 0.85rem;
+          color: rgba(196,172,235,0.7);
+          line-height: 1.45;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .store-card-footer {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0.5rem;
+          margin-top: 0.3rem;
+        }
+        .store-card-price {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 1.25rem;
+          letter-spacing: 0.06em;
+          color: #C084FC;
+          white-space: nowrap;
+          flex-shrink: 0;
+          text-shadow: 0 0 10px rgba(192,132,252,0.45);
+        }
+        .store-buy-btn {
+          background: linear-gradient(135deg, #5C0FAB 0%, #9333EA 60%, #A855F7 100%);
+          color: #fff;
+          border: 1px solid rgba(168,85,247,0.5);
+          border-radius: 2px;
+          padding: 0.45rem 0.9rem;
+          font-family: 'Orbitron', sans-serif;
+          font-weight: 700;
+          font-size: 0.58rem;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          cursor: pointer;
+          white-space: nowrap;
+          flex-shrink: 0;
+          box-shadow: 0 0 14px rgba(168,85,247,0.35);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .store-buy-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 0 28px rgba(168,85,247,0.65);
+        }
+        .store-buy-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          transform: none;
+        }
+        .store-card-img-wrap::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to bottom, transparent 50%, rgba(6,4,18,0.6) 100%);
+          pointer-events: none;
+        }
+        .store-skeleton {
+          aspect-ratio: 4/3;
+          background: linear-gradient(90deg, rgba(168,85,247,0.04) 0%, rgba(168,85,247,0.1) 50%, rgba(168,85,247,0.04) 100%);
+          background-size: 200% 100%;
+          animation: shimmer 1.4s ease-in-out infinite;
+          border-radius: 2px;
+          border: 1px solid rgba(168,85,247,0.1);
+        }
+        @keyframes shimmer {
+          0%   { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        .cat-label {
+          display: flex;
+          align-items: center;
+          gap: 0.8rem;
+          margin-bottom: 1.2rem;
+        }
+        .cat-label-text {
+          font-family: 'Orbitron', sans-serif;
+          font-size: 0.6rem;
+          font-weight: 700;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: #8B5CF6;
+          white-space: nowrap;
+        }
+        .cat-label-line {
+          flex: 1;
+          height: 1px;
+          background: linear-gradient(90deg, rgba(168,85,247,0.4), transparent);
+        }
+      `}</style>
+
       <section className="max-w-7xl mx-auto">
-        <div className="glass glass-strong p-5 md:p-7">
+        <div style={{ marginBottom: '2.5rem', display: 'flex', alignItems: 'baseline', gap: '1rem' }}>
           <h1
             style={{
-              fontFamily: "'Orbitron', sans-serif",
-              letterSpacing: '0.1em',
+              fontFamily: "'Bebas Neue', sans-serif",
+              letterSpacing: '0.08em',
               textTransform: 'uppercase',
-              color: '#E9D5FF',
-              fontSize: 'clamp(1.2rem, 2.6vw, 1.8rem)',
+              color: '#F3E8FF',
+              fontSize: 'clamp(2rem, 5vw, 3.2rem)',
+              lineHeight: 1,
             }}
           >
-            Boutique FiveLife
+            Boutique
           </h1>
+          <span style={{
+            fontFamily: "'Orbitron', sans-serif",
+            fontSize: '0.6rem',
+            letterSpacing: '0.18em',
+            color: '#8B5CF6',
+            textTransform: 'uppercase',
+          }}>
+            Tebex Secure
+          </span>
+        </div>
 
-          <p style={{ color: 'rgba(214,190,248,0.82)', marginTop: '0.45rem' }}>
-            Paiement sécurisé via Tebex.
-          </p>
+        {error && (
+          <div
+            style={{
+              marginBottom: '1.5rem',
+              border: '1px solid rgba(190,60,100,0.5)',
+              background: 'rgba(70,10,30,0.3)',
+              padding: '0.7rem 1rem',
+              color: '#FFD1DF',
+              fontFamily: "'Barlow Condensed', sans-serif",
+              fontSize: '0.9rem',
+              letterSpacing: '0.02em',
+              borderRadius: '2px',
+            }}
+          >
+            {error}
+          </div>
+        )}
 
-          {error && (
-            <div
-              style={{
-                marginTop: '1rem',
-                border: '1px solid rgba(190,60,100,0.6)',
-                background: 'rgba(70,10,30,0.35)',
-                padding: '0.75rem 0.9rem',
-                color: '#FFD1DF',
-              }}
-            >
-              {error}
+        {loading && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="store-skeleton" />
+            ))}
+          </div>
+        )}
+
+        {!loading && categories.length === 0 && !error && (
+          <div
+            style={{
+              border: '1px dashed rgba(168,85,247,0.25)',
+              padding: '2rem',
+              textAlign: 'center',
+              color: 'rgba(196,164,242,0.6)',
+              fontFamily: "'Orbitron', sans-serif",
+              fontSize: '0.65rem',
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Aucun article disponible
+          </div>
+        )}
+
+        {!loading && categories.map((category) => (
+          <div key={category.id} style={{ marginBottom: '2.5rem' }}>
+            <div className="cat-label">
+              <span className="cat-label-text">{category.name}</span>
+              <div className="cat-label-line" />
             </div>
-          )}
 
-          {loading && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="glass p-3"
-                  style={{ height: 250, opacity: 0.65, animation: 'pulse 1.2s ease-in-out infinite' }}
-                />
-              ))}
-            </div>
-          )}
-
-          {!loading && categories.length === 0 && (
-            <div
-              style={{
-                marginTop: '1rem',
-                border: '1px solid rgba(168,85,247,0.3)',
-                background: 'rgba(20,8,36,0.65)',
-                padding: '0.8rem 0.9rem',
-                color: '#DCC4FF',
-              }}
-            >
-              Aucune catégorie ou package n'est disponible pour le moment.
-            </div>
-          )}
-
-          {!loading && categories.map((category) => (
-            <div key={category.id} style={{ marginTop: '1.2rem' }}>
-              <h2
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: '0.95rem',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  color: '#C084FC',
-                }}
-              >
-                {category.name}
-              </h2>
-
-              {category.description && (
-                <p style={{ color: 'rgba(185,155,230,0.8)', marginTop: '0.3rem' }}>{category.description}</p>
-              )}
-
-              {category.packages.length === 0 ? (
-                <div
-                  style={{
-                    marginTop: '0.8rem',
-                    border: '1px dashed rgba(168,85,247,0.35)',
-                    padding: '0.7rem 0.8rem',
-                    color: 'rgba(196,164,242,0.8)',
-                  }}
-                >
-                  Aucun package dans cette catégorie.
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
-                  {category.packages.map((pkg) => (
-                    <article
-                      key={pkg.id}
-                      className="glass p-3"
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        transition: 'transform 0.18s ease, border-color 0.18s ease',
-                      }}
-                    >
+            {category.packages.length === 0 ? (
+              <p style={{ color: 'rgba(196,164,242,0.45)', fontSize: '0.85rem', fontFamily: "'Barlow Condensed', sans-serif" }}>
+                Aucun article dans cette catégorie.
+              </p>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                {category.packages.map((pkg) => (
+                  <article key={pkg.id} className="store-card">
+                    <div className="store-card-img-wrap">
                       <img
-                        src={pkg.image || 'https://placehold.co/800x450/10071E/E9D5FF?text=FiveLife+Store'}
+                        src={pkg.image || 'https://placehold.co/800x450/0A0416/A855F7?text='}
                         alt={pkg.name}
                         loading="lazy"
-                        style={{
-                          width: '100%',
-                          aspectRatio: '16 / 9',
-                          objectFit: 'cover',
-                          border: '1px solid rgba(168,85,247,0.22)',
-                        }}
+                        className="store-card-img"
                         onError={(e) => {
-                          e.currentTarget.src = 'https://placehold.co/800x450/10071E/E9D5FF?text=FiveLife+Store'
+                          e.currentTarget.src = 'https://placehold.co/800x450/0A0416/A855F7?text='
                         }}
                       />
+                    </div>
 
-                      <h3
-                        style={{
-                          marginTop: '0.65rem',
-                          color: '#F3E8FF',
-                          fontWeight: 700,
-                          letterSpacing: '0.03em',
-                        }}
-                      >
-                        {pkg.name}
-                      </h3>
-
-                      <p style={{ color: 'rgba(205,182,240,0.78)', marginTop: '0.32rem' }}>
-                        {pkg.description || 'Aucune description.'}
-                      </p>
-
-                      <div className="mt-auto flex items-center justify-between gap-3 pt-3">
-                        <span style={{ color: '#E9D5FF', fontWeight: 700 }}>
-                          {formatPrice(pkg.price, pkg.currency)}
-                        </span>
-
+                    <div className="store-card-body">
+                      <span className="store-card-name">{pkg.name}</span>
+                      {pkg.description && (
+                        <p className="store-card-desc">{pkg.description}</p>
+                      )}
+                      <div className="store-card-footer">
+                        <span className="store-card-price">{formatPrice(pkg.price, pkg.currency)}</span>
                         <button
                           type="button"
                           onClick={() => handleBuy(pkg.id)}
                           disabled={buyingPackageId === pkg.id}
-                          className="btn-primary"
-                          style={{
-                            padding: '0.55rem 1rem',
-                            fontSize: '0.64rem',
-                            opacity: buyingPackageId === pkg.id ? 0.6 : 1,
-                            pointerEvents: buyingPackageId === pkg.id ? 'none' : 'auto',
-                          }}
+                          className="store-buy-btn"
                         >
-                          {buyingPackageId === pkg.id ? 'Patiente...' : 'Acheter'}
+                          {buyingPackageId === pkg.id ? '...' : 'Acheter'}
                         </button>
                       </div>
-                    </article>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
       </section>
     </PageWrapper>
   )
