@@ -10,7 +10,7 @@ const FAQ_ITEMS = [
     items: [
       {
         q: 'Comment rejoindre le serveur FiveLife RP ?',
-        a: 'Ouvrez FiveM, cherchez "FiveLife RP" dans la liste des serveurs ou appuyez sur F8 et tapez : connect.fivelife-rp.com. Assurez-vous d\'avoir un compte Discord actif et d\'avoir lu le règlement.',
+        a: 'Ouvrez FiveM et cherchez "FiveLife RP" dans la liste des serveurs. Assurez-vous d\'avoir un compte Discord actif et d\'avoir lu le règlement.',
       },
       {
         q: 'Est-ce que je dois lire le règlement avant de jouer ?',
@@ -169,10 +169,9 @@ export default function Faq() {
       <div className="max-w-5xl mx-auto px-6 py-16 space-y-14">
 
         {/* Contact rapide */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
             { icon: '💬', label: 'Discord Support', sub: 'Tickets #support', href: 'https://discord.gg/ardQd3tqhg', color: '#5865f2' },
-            { icon: '🎮', label: 'Rejoindre le Serveur', sub: 'F8 → connect.fivelife-rp.com', href: '#', color: '#a855f7' },
             { icon: '📣', label: 'Annonces', sub: 'Canal #annonces Discord', href: 'https://discord.gg/ardQd3tqhg', color: '#ec4899' },
           ].map((c, i) => (
             <GlassCard key={i} delay={i * 0.06} className="p-5">

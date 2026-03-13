@@ -8,7 +8,7 @@ import AnimatedCounter from '../components/AnimatedCounter'
 import {
   DocumentTextIcon, ScaleIcon, FireIcon,
   TruckIcon, ShieldCheckIcon, ExclamationTriangleIcon,
-  ArrowRightIcon, SignalIcon,
+  ArrowRightIcon,
 } from '@heroicons/react/24/outline'
 
 /* ── Typing effect ─────────────────────────────── */
@@ -180,10 +180,6 @@ export default function Home() {
               variant="primary"
             >
               <span style={{ fontSize: '0.9em' }}>▶</span> Rejoindre Discord
-            </NeonButton>
-            <NeonButton variant="secondary">
-              <SignalIcon className="w-3.5 h-3.5" />
-              connect.fivelife-rp.com
             </NeonButton>
           </motion.div>
 

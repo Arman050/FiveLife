@@ -238,12 +238,6 @@ export default function LoadingScreen() {
           color: 'rgba(100,70,150,0.5)',
           textTransform: 'uppercase',
         }}>FiveLife RP © 2026</span>
-        <span style={{
-          fontFamily: "'Share Tech Mono', monospace",
-          fontSize: '0.7rem',
-          color: 'rgba(168,85,247,0.4)',
-          letterSpacing: '0.04em',
-        }}>connect.fivelife-rp.com</span>
       </div>
     </div>
   )

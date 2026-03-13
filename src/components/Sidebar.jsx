@@ -310,28 +310,6 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 ▶ Rejoindre Discord
               </a>
 
-              {/* Connect box */}
-              <div style={{
-                padding: '0.6rem 0.75rem',
-                background: 'rgba(100,15,180,0.1)',
-                border: '1px solid rgba(168,85,247,0.2)',
-                textAlign: 'center',
-              }}>
-                <p style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: '0.52rem',
-                  letterSpacing: '0.16em',
-                  color: 'rgba(100,70,150,0.7)',
-                  textTransform: 'uppercase',
-                  marginBottom: '2px',
-                }}>Console F8</p>
-                <p style={{
-                  fontFamily: "'Share Tech Mono', monospace",
-                  fontSize: '0.75rem',
-                  color: '#C084FC',
-                  letterSpacing: '0.04em',
-                }}>connect.fivelife-rp.com</p>
-              </div>
 
               <p style={{
                 textAlign: 'center',
