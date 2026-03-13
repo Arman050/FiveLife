@@ -17,6 +17,8 @@ const CANCEL_URL = (
   import.meta.env.VITE_TEBEX_CANCEL_URL || `${window.location.origin}/boutique`
 ).trim()
 
+const CHECKOUT_STATE_KEY = 'fivelife_tebex_checkout_state'
+
 function safeString(value, fallback = '') {
   if (typeof value === 'string') return value.trim()
   if (value === null || value === undefined) return fallback
@@ -111,6 +113,18 @@ async function createBasket() {
   })
 }
 
+async function fetchBasket(basketId) {
+  return apiRequest(
+    `/accounts/${encodeURIComponent(TEBEX_PUBLIC_TOKEN)}/baskets/${encodeURIComponent(basketId)}`,
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    },
+  )
+}
+
 async function addPackageToBasket(basketId, packageId) {
   const body = JSON.stringify({ package_id: Number(packageId) })
 
@@ -165,6 +179,52 @@ async function redirectToBasketAuth(basketId) {
 
   console.log('[Store] Redirecting to Tebex auth provider:', preferred)
   window.location.assign(preferred.url)
+}
+
+function saveCheckoutState(state) {
+  try {
+    localStorage.setItem(CHECKOUT_STATE_KEY, JSON.stringify(state))
+  } catch (err) {
+    console.warn('[Store] Unable to save checkout state:', err)
+  }
+}
+
+function readCheckoutState() {
+  try {
+    const raw = localStorage.getItem(CHECKOUT_STATE_KEY)
+    if (!raw) return null
+    return JSON.parse(raw)
+  } catch {
+    return null
+  }
+}
+
+function clearCheckoutState() {
+  try {
+    localStorage.removeItem(CHECKOUT_STATE_KEY)
+  } catch {
+    // no-op
+  }
+}
+
+function resolveCheckoutUrl(basketId, basketPayload) {
+  const data = basketPayload?.data || basketPayload || {}
+  const links = data?.links || {}
+
+  const checkoutFromApi =
+    safeString(links?.checkout) ||
+    safeString(links?.payment) ||
+    (Array.isArray(links)
+      ? safeString(
+          links.find((item) => safeString(item?.name).toLowerCase().includes('checkout'))?.url ||
+          links.find((item) => safeString(item?.name).toLowerCase().includes('payment'))?.url,
+        )
+      : '')
+
+  if (checkoutFromApi) return checkoutFromApi
+
+  // Safe fallback: Tebex checkout path uses /checkout/{basketIdent}
+  return `https://checkout.tebex.io/checkout/${encodeURIComponent(basketId)}`
 }
 
 function sanitizePackage(pkg) {
@@ -267,19 +327,36 @@ export default function Store() {
       setBuyingPackageId(packageId)
       setError('')
 
-      // Step 1: create basket
-      const basketRes = await createBasket()
+      // Step 1: create/reuse basket
+      const existingState = readCheckoutState()
+      let basketId = safeString(existingState?.basketId)
+      let basketData = null
 
-      const basketId =
-        safeString(basketRes?.data?.ident) ||
-        safeString(basketRes?.ident) ||
-        safeString(basketRes?.basket?.ident)
+      if (basketId) {
+        try {
+          const basketRes = await fetchBasket(basketId)
+          basketData = basketRes?.data || basketRes || {}
+          console.log('[Store] Reusing existing basket:', { basketId, basketData })
+        } catch {
+          basketId = ''
+          basketData = null
+        }
+      }
 
-      const basketData = basketRes?.data || basketRes || {}
+      if (!basketId) {
+        const basketRes = await createBasket()
+        basketId =
+          safeString(basketRes?.data?.ident) ||
+          safeString(basketRes?.ident) ||
+          safeString(basketRes?.basket?.ident)
+        basketData = basketRes?.data || basketRes || {}
+      }
 
       if (!basketId) {
         throw new Error('Panier créé sans identifiant Tebex.')
       }
+
+      saveCheckoutState({ basketId, packageId: Number(packageId), ts: Date.now() })
 
       // Tebex may require user auth before package add.
       // If basket has no user attached, redirect to auth first.
@@ -289,11 +366,27 @@ export default function Store() {
       }
 
       // Step 2: add package to basket
-      await addPackageToBasket(basketId, packageId)
+      const addRes = await addPackageToBasket(basketId, packageId)
+
+      // Refresh basket to get canonical checkout links if not present
+      let basketForCheckout = addRes
+      const linksData = (addRes?.data || addRes || {})?.links
+      const hasCheckoutLinks =
+        (typeof linksData === 'object' && !Array.isArray(linksData) && (linksData?.checkout || linksData?.payment)) ||
+        (Array.isArray(linksData) && linksData.length > 0)
+
+      if (!hasCheckoutLinks) {
+        try {
+          basketForCheckout = await fetchBasket(basketId)
+        } catch (err) {
+          console.warn('[Store] Could not refresh basket for checkout links, using fallback URL:', err)
+        }
+      }
 
       // Step 3: redirect to checkout
-      const checkoutUrl = `https://checkout.tebex.io/payment/${encodeURIComponent(basketId)}`
+      const checkoutUrl = resolveCheckoutUrl(basketId, basketForCheckout)
       console.log('[Store] Redirect checkout:', checkoutUrl)
+      clearCheckoutState()
       window.location.assign(checkoutUrl)
     } catch (e) {
       console.error('[Store] Checkout failed:', e)
@@ -303,6 +396,7 @@ export default function Store() {
 
       if (rawMessage === 'LOGIN_REQUIRED' && e?.basketId) {
         try {
+          saveCheckoutState({ basketId: e.basketId, packageId: Number(packageId), ts: Date.now() })
           await redirectToBasketAuth(e.basketId)
           return
         } catch (authErr) {
@@ -323,6 +417,25 @@ export default function Store() {
       setBuyingPackageId(null)
     }
   }
+
+  useEffect(() => {
+    const resume = async () => {
+      const state = readCheckoutState()
+      if (!state?.basketId || !state?.packageId) return
+
+      // Avoid stale resumptions
+      if (Date.now() - Number(state.ts || 0) > 20 * 60 * 1000) {
+        clearCheckoutState()
+        return
+      }
+
+      console.log('[Store] Resuming pending checkout state:', state)
+      await handleBuy(Number(state.packageId))
+    }
+
+    resume()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <PageWrapper
