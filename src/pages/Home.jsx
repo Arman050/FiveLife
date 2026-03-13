@@ -249,7 +249,7 @@ export default function Home() {
         style={{ maxHeight: 320 }}
       >
         <img
-          src="/banniere2.png"
+          src="/banniere3.png"
           alt="FiveLife RP Banner"
           style={{
             width: '100%',

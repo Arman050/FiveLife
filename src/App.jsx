@@ -14,6 +14,7 @@ const Police          = lazy(() => import('./pages/Police'))
 const Entreprises     = lazy(() => import('./pages/Entreprises'))
 const Sanctions       = lazy(() => import('./pages/Sanctions'))
 const Faq             = lazy(() => import('./pages/Faq'))
+const Store           = lazy(() => import('./pages/Store'))
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -46,6 +47,7 @@ export default function App() {
             <Route path="/entreprises"       element={<Entreprises />} />
             <Route path="/sanctions"         element={<Sanctions />} />
             <Route path="/faq-contact"       element={<Faq />} />
+            <Route path="/boutique"          element={<Store />} />
           </Routes>
         </Suspense>
       </main>

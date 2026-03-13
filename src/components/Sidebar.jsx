@@ -12,6 +12,7 @@ import {
   BuildingOfficeIcon,
   ExclamationTriangleIcon,
   ChatBubbleLeftRightIcon,
+  ShoppingBagIcon,
   Bars3Icon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -43,6 +44,7 @@ const NAV_GROUPS = [
   {
     label: 'Autres',
     items: [
+      { path: '/boutique',          label: 'Boutique',         icon: ShoppingBagIcon,        emoji: '▪' },
       { path: '/sanctions',         label: 'Sanctions',        icon: ExclamationTriangleIcon, emoji: '▪' },
       { path: '/faq-contact',       label: 'FAQ & Contact',    icon: ChatBubbleLeftRightIcon, emoji: '▪' },
     ],
