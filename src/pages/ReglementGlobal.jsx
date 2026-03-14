@@ -25,7 +25,7 @@ const GENERAL_RULES = [
   { icon: '⛔', text: 'Propos racistes, xénophobes, homophobes ou haineux → bannissement immédiat.', severity: 'ban' },
   { icon: '⛔', text: 'Contenu sexuel, religieux ou haineux affiché ou envoyé → bannissement.', severity: 'ban' },
   { icon: '🔞', text: 'Personnage mineur interdit. Votre personnage doit avoir 21 ans minimum.', severity: 'ban' },
-  { icon: '🎙️', text: 'Vocal extérieur à FiveM strictement interdit (Discord, Teams, etc.) en jeu.', severity: 'ban' },
+  { icon: '🎙️', text: 'Vocal extérieur au jeu strictement interdit (Discord, Teams, etc.) en session.', severity: 'ban' },
   { icon: '📺', text: 'Stream hack interdit — être sur un stream en même temps qu\'on est en jeu.', severity: 'ban' },
   { icon: '❌', text: 'RP sexuel interdit, sans exception, quel que soit l\'âge des joueurs.', severity: 'ban' },
   { icon: '💬', text: 'Dialecte HRP interdit en jeu ("papillon", "gopro", "faire un ticket"…).', severity: 'warn' },
@@ -52,7 +52,7 @@ const BAN_RULES = [
   { icon: '🔍', text: 'Le staff peut refuser l\'accès à tout joueur ayant un historique problématique sur d\'autres serveurs partenaires.', severity: 'warn' },
   { icon: '⚠️', text: 'Antécédents de cheat, duplication, logiciels tiers = refus d\'accès automatique.', severity: 'ban' },
   { icon: '💢', text: 'Comportements toxiques, harcèlement, troll, griefing = exclusion.', severity: 'ban' },
-  { icon: '📊', text: 'Le nombre d\'heures FiveM, le comportement Discord et les signalements sont pris en compte.', severity: 'info' },
+  { icon: '📊', text: 'Le temps de jeu, le comportement Discord et les signalements sont pris en compte.', severity: 'info' },
   { icon: '🔐', text: 'Refuser l\'accès ne nécessite aucune justification publique — protection de la communauté.', severity: 'info' },
 ]
 

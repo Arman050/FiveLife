@@ -169,9 +169,7 @@ async function redirectToBasketAuth(basketId) {
     (Array.isArray(linksResponse?.data) && linksResponse.data) ||
     []
 
-  const preferred =
-    providers.find((p) => safeString(p?.name).toLowerCase().includes('fivem')) ||
-    providers[0]
+  const preferred = providers[0]
 
   if (!preferred?.url) {
     throw new Error('Aucun provider de connexion Tebex disponible pour ce panier.')
@@ -403,7 +401,7 @@ export default function Store() {
           console.error('[Store] Auth link fetch failed:', authErr)
         }
 
-        setError('Tu dois te connecter (FiveM/Tebex) avant d\'ajouter ce package au panier.')
+        setError('Tu dois te connecter à ton compte avant d\'ajouter ce package au panier.')
         setBuyingPackageId(null)
         return
       }

@@ -115,7 +115,7 @@ export default function Home() {
           >
             <span className="badge badge-purple">
               <span className="pulse-dot w-1.5 h-1.5" />
-              Serveur FiveM · GTA V RP · Serious
+              Serveur GTA V RP · Serious
             </span>
           </motion.div>
 
@@ -180,10 +180,6 @@ export default function Home() {
               variant="primary"
             >
               <span style={{ fontSize: '0.9em' }}>▶</span> Rejoindre Discord
-            </NeonButton>
-            <NeonButton variant="secondary">
-              <SignalIcon className="w-3.5 h-3.5" />
-              connect.fivelife-rp.com
             </NeonButton>
           </motion.div>
 

@@ -174,7 +174,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                     letterSpacing: '0.2em',
                     color: '#8B5CF6',
                     textTransform: 'uppercase',
-                  }}>RP · Serious · FiveM</p>
+                  }}>RP · Serious · FR</p>
                 </div>
               </motion.div>
 
@@ -312,7 +312,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 ▶ Rejoindre Discord
               </a>
 
-              {/* Connect box */}
+              {/* Info box */}
               <div style={{
                 padding: '0.6rem 0.75rem',
                 background: 'rgba(100,15,180,0.1)',
@@ -326,13 +326,13 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                   color: 'rgba(100,70,150,0.7)',
                   textTransform: 'uppercase',
                   marginBottom: '2px',
-                }}>Console F8</p>
+                }}>Accès serveur</p>
                 <p style={{
                   fontFamily: "'Share Tech Mono', monospace",
                   fontSize: '0.75rem',
                   color: '#C084FC',
                   letterSpacing: '0.04em',
-                }}>connect.fivelife-rp.com</p>
+                }}>Via Discord officiel</p>
               </div>
 
               <p style={{

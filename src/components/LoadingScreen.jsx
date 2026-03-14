@@ -216,7 +216,7 @@ export default function LoadingScreen() {
           >
             {pct < 30 ? 'Initialisation des ressources…'
               : pct < 60 ? 'Chargement des assets RP…'
-              : pct < 90 ? 'Connexion au serveur FiveM…'
+              : pct < 90 ? 'Connexion au serveur…'
               : 'Bienvenue à Los Santos'}
           </motion.p>
         </motion.div>
@@ -243,7 +243,7 @@ export default function LoadingScreen() {
           fontSize: '0.7rem',
           color: 'rgba(168,85,247,0.4)',
           letterSpacing: '0.04em',
-        }}>connect.fivelife-rp.com</span>
+        }}>discord.gg/k5QXH7yZAZ</span>
       </div>
     </div>
   )
