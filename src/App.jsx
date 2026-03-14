@@ -1,56 +1,50 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Sidebar from './components/Sidebar'
-import ParticleBg from './components/ParticleBg'
-import LoadingScreen from './components/LoadingScreen'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
+import AnnouncementBar from './components/AnnouncementBar'
 
-const Home            = lazy(() => import('./pages/Home'))
-const ReglementGlobal = lazy(() => import('./pages/ReglementGlobal'))
-const ReglementLegal  = lazy(() => import('./pages/ReglementLegal'))
-const ReglementIllegal= lazy(() => import('./pages/ReglementIllegal'))
-const HrpRp           = lazy(() => import('./pages/HrpRp'))
-const Ambulance       = lazy(() => import('./pages/Ambulance'))
-const Police          = lazy(() => import('./pages/Police'))
-const Entreprises     = lazy(() => import('./pages/Entreprises'))
-const Sanctions       = lazy(() => import('./pages/Sanctions'))
-const Faq             = lazy(() => import('./pages/Faq'))
-const Store           = lazy(() => import('./pages/Store'))
+const Home          = lazy(() => import('./pages/Home'))
+const Shop          = lazy(() => import('./pages/Shop'))
+const About         = lazy(() => import('./pages/About'))
+const Blog          = lazy(() => import('./pages/Blog'))
+const Contact       = lazy(() => import('./pages/Contact'))
+const ProductDetail = lazy(() => import('./pages/ProductDetail'))
+
+function PageLoader() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-cream-50">
+      <div className="flex flex-col items-center gap-4">
+        <svg className="w-10 h-10 text-terracotta-500 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        </svg>
+        <span className="font-jost text-warm-400 text-sm tracking-widest uppercase">Chargement…</span>
+      </div>
+    </div>
+  )
+}
 
 export default function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
   return (
     <Router>
-      {/* Particle canvas background */}
-      <ParticleBg />
-
-      {/* Subtle scan line */}
-      <div className="scanline" />
-
-      {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
-
-      {/* Main content — offset by sidebar on md+ */}
-      <main
-        className="relative z-10 transition-all duration-300 ease-in-out"
-        style={{ marginLeft: sidebarOpen ? 0 : 0 }}
-      >
-        <Suspense fallback={<LoadingScreen />}>
-          <Routes>
-            <Route path="/"                  element={<Home />} />
-            <Route path="/reglement-global"  element={<ReglementGlobal />} />
-            <Route path="/reglement-legal"   element={<ReglementLegal />} />
-            <Route path="/reglement-illegal" element={<ReglementIllegal />} />
-            <Route path="/hrp-rp"            element={<HrpRp />} />
-            <Route path="/ambulance-sams"    element={<Ambulance />} />
-            <Route path="/sasp-police"       element={<Police />} />
-            <Route path="/entreprises"       element={<Entreprises />} />
-            <Route path="/sanctions"         element={<Sanctions />} />
-            <Route path="/faq-contact"       element={<Faq />} />
-            <Route path="/boutique"          element={<Store />} />
-          </Routes>
-        </Suspense>
-      </main>
+      <div className="flex flex-col min-h-screen bg-cream-50">
+        <AnnouncementBar />
+        <Navbar />
+        <main className="flex-1">
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/"                    element={<Home />} />
+              <Route path="/boutique"            element={<Shop />} />
+              <Route path="/boutique/:slug"      element={<ProductDetail />} />
+              <Route path="/a-propos"            element={<About />} />
+              <Route path="/blog"                element={<Blog />} />
+              <Route path="/contact"             element={<Contact />} />
+            </Routes>
+          </Suspense>
+        </main>
+        <Footer />
+      </div>
     </Router>
   )
 }
